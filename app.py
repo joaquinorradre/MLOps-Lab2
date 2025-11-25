@@ -6,60 +6,83 @@ from PIL import Image
 API_URL = "https://mlops-lab2-latest.onrender.com"
 
 def predict_image(file_path):
+    if not file_path:
+        return None
     try:
         with open(file_path, "rb") as f:
             files = {"file": (file_path, f, "image/png")}
-            response = requests.post(f"{API_URL}/predict", files=files, timeout=10)
+            response = requests.post(f"{API_URL}/predict", files=files, timeout=20)
             response.raise_for_status()
             data = response.json()
             return f"Prediction: {data.get('prediction')}"
-    except requests.exceptions.HTTPError as e:
-        return f"Error: {response.json().get('detail', str(e))}"
+    except Exception as e:
+        raise gr.Error(f"Error en predicción: {str(e)}")
 
 def resize_image(file_path, width, height):
+    if not file_path:
+        return None
     try:
         with open(file_path, "rb") as f:
             files = {"file": (file_path, f, "image/png")}
-            data = {"width": width, "height": height}
-            response = requests.post(f"{API_URL}/resize", files=files, data=data, timeout=10)
-            response.raise_for_status()
-            # DEVUELVE PIL.Image
-            return Image.open(BytesIO(response.content))
-    except requests.exceptions.HTTPError as e:
-        return f"Error: {response.json().get('detail', str(e))}"
+            data = {"width": int(width), "height": int(height)}
+            response = requests.post(f"{API_URL}/resize", files=files, data=data, timeout=20)
+            
+            if response.status_code != 200:
+                try:
+                    detail = response.json().get('detail')
+                except:
+                    detail = response.text
+                raise gr.Error(f"Error API ({response.status_code}): {detail}")
+            
+            return Image.open(BytesIO(response.content)).convert("RGB")
+            
+    except Exception as e:
+        raise gr.Error(f"Fallo en resize: {str(e)}")
 
 def grayscale_image(file_path):
+    if not file_path:
+        return None
     try:
         with open(file_path, "rb") as f:
             files = {"file": (file_path, f, "image/png")}
-            response = requests.post(f"{API_URL}/grayscale", files=files, timeout=10)
-            response.raise_for_status()
-            # DEVUELVE PIL.Image
-            return Image.open(BytesIO(response.content))
-    except requests.exceptions.HTTPError as e:
-        return f"Error: {response.json().get('detail', str(e))}"
+            response = requests.post(f"{API_URL}/grayscale", files=files, timeout=20)
+            
+            if response.status_code != 200:
+                try:
+                    detail = response.json().get('detail')
+                except:
+                    detail = response.text
+                raise gr.Error(f"Error API ({response.status_code}): {detail}")
+            
+            return Image.open(BytesIO(response.content)).convert("RGB")
+            
+    except Exception as e:
+        raise gr.Error(f"Fallo en grayscale: {str(e)}")
 
 with gr.Blocks() as demo:
     gr.Markdown("## MLOps Lab 2 - Image Processing API")
-
+    
     with gr.Tab("Predict"):
         img_input = gr.Image(type="filepath", label="Upload Image")
         predict_btn = gr.Button("Predict")
         predict_output = gr.Textbox(label="Prediction")
         predict_btn.click(predict_image, inputs=img_input, outputs=predict_output)
-
+    
     with gr.Tab("Resize"):
-        resize_img = gr.Image(type="filepath", label="Upload image")
-        width_input = gr.Number(label="Width", value=256)
-        height_input = gr.Number(label="Height", value=256)
+        with gr.Row():
+            resize_img = gr.Image(type="filepath", label="Upload image")
+            resize_output = gr.Image(label="Resized image")
+        with gr.Row():
+            width_input = gr.Number(label="Width", value=256, precision=0)
+            height_input = gr.Number(label="Height", value=256, precision=0)
         resize_btn = gr.Button("Resize")
-        resize_output = gr.Image(label="Resized image")
         resize_btn.click(resize_image, inputs=[resize_img, width_input, height_input], outputs=resize_output)
-
+    
     with gr.Tab("Grayscale"):
-        gray_img = gr.Image(type="filepath", label="Upload image")
+        with gr.Row():
+            gray_img = gr.Image(type="filepath", label="Upload image")
+            gray_output = gr.Image(label="Grayscale image")
         gray_btn = gr.Button("Convert to Grayscale")
-        gray_output = gr.Image(label="Grayscale image")
         gray_btn.click(grayscale_image, inputs=gray_img, outputs=gray_output)
 
 if __name__ == "__main__":
