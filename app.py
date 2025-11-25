@@ -77,8 +77,8 @@ with gr.Blocks() as demo:
     
     with gr.Tab("Resize"):
         with gr.Row():
-            resize_img = gr.Image(type="filepath", label="Upload image")
-            resize_output = gr.Image(label="Resized image")
+            resize_img = gr.Image(type="filepath", label="Upload Image")
+            resize_output = gr.Image(label="Resized Image")
         with gr.Row():
             width_input = gr.Number(label="Width", value=256, precision=0)
             height_input = gr.Number(label="Height", value=256, precision=0)
@@ -87,8 +87,8 @@ with gr.Blocks() as demo:
     
     with gr.Tab("Grayscale"):
         with gr.Row():
-            gray_img = gr.Image(type="filepath", label="Upload image")
-            gray_output = gr.Image(label="Grayscale image")
+            gray_img = gr.Image(type="filepath", label="Upload Image")
+            gray_output = gr.Image(label="Grayscale Image")
         gray_btn = gr.Button("Convert to Grayscale")
         gray_btn.click(grayscale_image, inputs=gray_img, outputs=gray_output)
 
