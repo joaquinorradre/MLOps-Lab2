@@ -18,7 +18,7 @@ To facilitate interaction, a Gradio interface has been developed as a frontend. 
 
 ## 🚀 Live Demo
 - **Backend API (Swagger UI)**: [Render API](https://mlops-lab2-latest.onrender.com/docs)
-- **Frontend Interface (Gradio)**: [HuggingFace Space]((https://huggingface.co/spaces/joaquinorradre/mlops))
+- **Frontend Interface (Gradio)**: [HuggingFace Space](https://huggingface.co/spaces/joaquinorradre/mlops)
 
 ## ✨ Features
 
