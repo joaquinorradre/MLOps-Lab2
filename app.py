@@ -1,6 +1,7 @@
 import gradio as gr
 import requests
 from io import BytesIO
+from PIL import Image
 
 API_URL = "https://mlops-lab2-latest.onrender.com"
 
@@ -22,7 +23,8 @@ def resize_image(file_path, width, height):
             data = {"width": width, "height": height}
             response = requests.post(f"{API_URL}/resize", files=files, data=data, timeout=10)
             response.raise_for_status()
-            return BytesIO(response.content)
+            # DEVUELVE PIL.Image
+            return Image.open(BytesIO(response.content))
     except requests.exceptions.HTTPError as e:
         return f"Error: {response.json().get('detail', str(e))}"
 
@@ -32,7 +34,8 @@ def grayscale_image(file_path):
             files = {"file": (file_path, f, "image/png")}
             response = requests.post(f"{API_URL}/grayscale", files=files, timeout=10)
             response.raise_for_status()
-            return BytesIO(response.content)
+            # DEVUELVE PIL.Image
+            return Image.open(BytesIO(response.content))
     except requests.exceptions.HTTPError as e:
         return f"Error: {response.json().get('detail', str(e))}"
 
