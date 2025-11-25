@@ -43,7 +43,7 @@ with gr.Blocks() as demo:
     gr.Markdown("## MLOps Lab 2 - Image Processing API")
 
     with gr.Tab("Predict"):
-        img_input = gr.Image(type="filepath", label="Upload image")
+        img_input = gr.Image(type="filepath", label="Upload Image")
         predict_btn = gr.Button("Predict")
         predict_output = gr.Textbox(label="Prediction")
         predict_btn.click(predict_image, inputs=img_input, outputs=predict_output)
