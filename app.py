@@ -1,5 +1,6 @@
 import gradio as gr
 import requests
+import os
 from io import BytesIO
 from PIL import Image
 
@@ -10,7 +11,9 @@ def predict_image(file_path):
         return None
     try:
         with open(file_path, "rb") as f:
-            files = {"file": (file_path, f, "image/png")}
+            filename = os.path.basename(file_path)
+            files = {"file": (filename, f, "image/png")}
+            
             response = requests.post(f"{API_URL}/predict", files=files, timeout=20)
             response.raise_for_status()
             data = response.json()
@@ -23,7 +26,9 @@ def resize_image(file_path, width, height):
         return None
     try:
         with open(file_path, "rb") as f:
-            files = {"file": (file_path, f, "image/png")}
+            filename = os.path.basename(file_path)
+            files = {"file": (filename, f, "image/png")}
+            
             data = {"width": int(width), "height": int(height)}
             response = requests.post(f"{API_URL}/resize", files=files, data=data, timeout=20)
             
@@ -44,7 +49,9 @@ def grayscale_image(file_path):
         return None
     try:
         with open(file_path, "rb") as f:
-            files = {"file": (file_path, f, "image/png")}
+            filename = os.path.basename(file_path)
+            files = {"file": (filename, f, "image/png")}
+            
             response = requests.post(f"{API_URL}/grayscale", files=files, timeout=20)
             
             if response.status_code != 200:
