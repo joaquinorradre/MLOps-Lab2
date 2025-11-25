@@ -13,7 +13,7 @@ from fastapi.responses import HTMLResponse, StreamingResponse
 from mylib import logic
 
 app = FastAPI(
-    title="API for Image Processing (MLOps Lab 1)",
+    title="API for Image Processing (MLOps Lab 2)",
     description="API to predict image classes and resize images.",
     version="1.0.0",
 )
