@@ -12,7 +12,7 @@ This project provides an Image Processing API built with FastAPI. It allows user
 To facilitate interaction, a Gradio interface has been developed as a frontend. This frontend is deployed on HuggingFace Spaces and communicates with the backend API, which is hosted on Render.
 
 ### Key Capabilities
-- **Predict**: Identify image classes using a pre-trained model.
+- **Predict**: Identify image classes by random choice.
 - **Resize**: Adjust images to custom width and height dimensions.
 - **Grayscale**: Convert color images to grayscale.
 
