@@ -67,7 +67,7 @@ def grayscale_image(file_path):
         raise gr.Error(f"Fallo en grayscale: {str(e)}")
 
 with gr.Blocks() as demo:
-    gr.Markdown("## MLOps Lab 2 - Image Processing API")
+    gr.Markdown("## MLOps Lab 2 - Image Prediction & Processing API")
     
     with gr.Tab("Predict"):
         img_input = gr.Image(type="filepath", label="Upload Image")
